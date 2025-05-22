@@ -4,7 +4,6 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     [SerializeField] private Transform spawnTransform;
-    
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float jumpSpeed;
@@ -12,16 +11,20 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private GameObject jumpDetector;
     [SerializeField] private GroundCheck groundCheck;
     
+
     private float coyoteTime = 0.1f;
     private float coyoteTimeCounter = 0f;
+    private float jumpBufferCounter;
+    private float jumpBufferTime = 0.2f; 
     private Rigidbody2D rb2d;
     private float movX;
+
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         jumpDetector.transform.rotation = Quaternion.identity;
@@ -34,13 +37,21 @@ public class BallMovement : MonoBehaviour
         else{
             coyoteTimeCounter -= Time.deltaTime;
         }
-        if (coyoteTimeCounter>0 &&Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter-=Time.deltaTime;
+        }
+        if (coyoteTimeCounter>0f && jumpBufferCounter>0f)
         {
         //   Jump();
         rb2d.linearVelocityY = jumpSpeed;
         coyoteTimeCounter = 0f;
+        jumpBufferCounter = 0f;
         }
-
     }
 
     private void FixedUpdate()
@@ -64,11 +75,6 @@ public class BallMovement : MonoBehaviour
         {
             rb2d.linearVelocityX = maxMoveSpeed;
         }
-
-        // if (rb2d.linearVelocityY <Math.Abs(maxJumpSpeed))
-        // {
-        //     rb2d.linearVelocityY += jumpSpeed;
-        // }
     }
 
     private void Jump()
@@ -76,7 +82,6 @@ public class BallMovement : MonoBehaviour
         if (groundCheck.isGrounded)
         {
             rb2d.linearVelocityY = jumpSpeed;
-
         }
     }
 }
