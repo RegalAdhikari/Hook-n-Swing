@@ -12,7 +12,8 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private GameObject jumpDetector;
     [SerializeField] private GroundCheck groundCheck;
     
-    
+    private float coyoteTime = 0.1f;
+    private float coyoteTimeCounter = 0f;
     private Rigidbody2D rb2d;
     private float movX;
     void Start()
@@ -25,11 +26,21 @@ public class BallMovement : MonoBehaviour
     {
         jumpDetector.transform.rotation = Quaternion.identity;
         jumpDetector.transform.position = new Vector3(transform.position.x, transform.position.y -0.55f, 0f);
-      movX = Input.GetAxis("Horizontal");
-      if (Input.GetKeyDown(KeyCode.Space))
-      {
-          Jump();
-      }
+        movX = Input.GetAxis("Horizontal");
+        if(groundCheck.isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else{
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+        if (coyoteTimeCounter>0 &&Input.GetKeyDown(KeyCode.Space))
+        {
+        //   Jump();
+        rb2d.linearVelocityY = jumpSpeed;
+        coyoteTimeCounter = 0f;
+        }
+
     }
 
     private void FixedUpdate()
