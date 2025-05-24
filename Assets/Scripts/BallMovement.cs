@@ -51,7 +51,13 @@ public class BallMovement : MonoBehaviour
         {
             jumpBufferCounter-=Time.deltaTime;
         }
-        
+        if (coyoteTimeCounter>0f && jumpBufferCounter>0f)
+        {
+        //   Jump();
+        rb2d.linearVelocityY = jumpSpeed;
+        coyoteTimeCounter = 0f;
+        jumpBufferCounter = 0f;
+        }
     }
 
     private void FixedUpdate()
@@ -77,18 +83,12 @@ public class BallMovement : MonoBehaviour
         }
     }
 
-    public void Jump()
+    private void Jump()
     {
-        if (coyoteTimeCounter>0f && jumpBufferCounter>0f)
+        if (groundCheck.isGrounded)
         {
-        rb2d.linearVelocityY = jumpSpeed;
-        coyoteTimeCounter = 0f;
-        jumpBufferCounter = 0f;
+            rb2d.linearVelocityY = jumpSpeed;
         }
-        // if (groundCheck.isGrounded)
-        // {
-        //     rb2d.linearVelocityY = jumpSpeed;
-        // }
     }
     public void movePress(float value){
         moveValue = value;
