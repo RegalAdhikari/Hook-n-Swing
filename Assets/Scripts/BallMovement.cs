@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallMovement : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float maxJumpSpeed;
+
+    public float moveValue;
+
     [SerializeField] private GameObject jumpDetector;
     [SerializeField] private GroundCheck groundCheck;
     
@@ -27,9 +31,11 @@ public class BallMovement : MonoBehaviour
 
     void Update()
     {
+        
         jumpDetector.transform.rotation = Quaternion.identity;
         jumpDetector.transform.position = new Vector3(transform.position.x, transform.position.y -0.55f, 0f);
-        movX = Input.GetAxis("Horizontal");
+        // movX = Input.GetAxis("Horizontal"); // Comment out for release
+        movX = moveValue;
         if(groundCheck.isGrounded)
         {
             coyoteTimeCounter = coyoteTime;
@@ -45,13 +51,7 @@ public class BallMovement : MonoBehaviour
         {
             jumpBufferCounter-=Time.deltaTime;
         }
-        if (coyoteTimeCounter>0f && jumpBufferCounter>0f)
-        {
-        //   Jump();
-        rb2d.linearVelocityY = jumpSpeed;
-        coyoteTimeCounter = 0f;
-        jumpBufferCounter = 0f;
-        }
+        
     }
 
     private void FixedUpdate()
@@ -77,11 +77,23 @@ public class BallMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
-        if (groundCheck.isGrounded)
+        if (coyoteTimeCounter>0f && jumpBufferCounter>0f)
         {
-            rb2d.linearVelocityY = jumpSpeed;
+        rb2d.linearVelocityY = jumpSpeed;
+        coyoteTimeCounter = 0f;
+        jumpBufferCounter = 0f;
         }
+        // if (groundCheck.isGrounded)
+        // {
+        //     rb2d.linearVelocityY = jumpSpeed;
+        // }
+    }
+    public void movePress(float value){
+        moveValue = value;
+    }
+    public void moveRelease(){
+        moveValue = 0;
     }
 }
