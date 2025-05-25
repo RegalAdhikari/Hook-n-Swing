@@ -26,7 +26,7 @@ public class BallMovement : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        dragDistance = Screen.height * 15 / 100; //dragDistance is 15% height of the screen
+        dragDistance = Screen.height * 20 / 100; //dragDistance is 15% height of the screen
 
     }
 
@@ -69,8 +69,10 @@ public class BallMovement : MonoBehaviour
         // If the ball goes too down
         if (transform.position.y <= -10f)
         {
-            rb2d.linearVelocity = Vector3.zero;
             transform.position = spawnTransform.position;
+
+            rb2d.linearVelocity = Vector3.zero;
+            rb2d.angularVelocity = 0f;
         }
     }
 
