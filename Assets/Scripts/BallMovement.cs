@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class BallMovement : MonoBehaviour
 {
     [SerializeField] private Transform spawnTransform;
@@ -110,64 +108,70 @@ public class BallMovement : MonoBehaviour
         if (Input.touchCount == 1) // user is touching the screen with a single touch
         {
             Touch touch = Input.GetTouch(0); // get the touch
+            if (touch.phase != TouchPhase.Stationary)
+            {
+                moveValue = 0;
+            }
             if (touch.phase == TouchPhase.Began) //check for the first touch
-            {
-                fp = touch.position;
-                lp = touch.position;
-                if (fp.x < Screen.width / 2)
                 {
-                    Debug.Log("Move left");
-                    moveValue = -1;
-                }
-                else
-                {
-                    Debug.Log("Move right");
-                    moveValue = 1;
-                }
-            }
-
-            else if (touch.phase == TouchPhase.Moved) // update the last position based on where they moved
-            {
-                lp = touch.position;
-                moveValue = 0;
-
-            }
-            else if (touch.phase == TouchPhase.Ended) //check if the finger is removed from the screen
-            {
-                moveValue = 0;
-
-                lp = touch.position;  //last touch position. Ommitted if you use list
-
-                //Check if drag distance is greater than 20% of the screen height
-                if (Mathf.Abs(lp.x - fp.x) > dragDistance || Mathf.Abs(lp.y - fp.y) > dragDistance)
-                {//It's a drag
-                 //check if the drag is vertical or horizontal
-                    if (Mathf.Abs(lp.x - fp.x) > Mathf.Abs(lp.y - fp.y))
-                    {   //If the horizontal movement is greater than the vertical movement...
-                        if (lp.x > fp.x)  //If the movement was to the right)
-                        {   //Right swipe
-                            Debug.Log("Right Swipe");
-                        }
-                        // else
-                        // {   //Left swipe
-                        //     Debug.Log("Left Swipe");
-                        // }
+                    fp = touch.position;
+                    lp = touch.position;
+                    if (fp.x < Screen.width / 2)
+                    {
+                        // Debug.Log("Move left");
+                        moveValue = -1;
                     }
                     else
-                    {   //the vertical movement is greater than the horizontal movement
-                        if (lp.y > fp.y)  //If the movement was up
-                        {   //Up swipe
-                            Debug.Log("Up Swipe");
-                        }
+                    {
+                        // Debug.Log("Move right");
+                        moveValue = 1;
                     }
                 }
-                else
-                {   //It's a tap as the drag distance is less than 20% of the screen height
-                    moveValue = 0;
-                    Debug.Log("Tap");
-                }
 
-            }
+                else if (touch.phase == TouchPhase.Moved) // update the last position based on where they moved
+                {
+                    lp = touch.position;
+                    moveValue = 0;
+
+                }
+                else if (touch.phase == TouchPhase.Ended) //check if the finger is removed from the screen
+                {
+                    moveValue = 0;
+
+                    lp = touch.position;  //last touch position. Ommitted if you use list
+
+                    //Check if drag distance is greater than 20% of the screen height
+                    if (Mathf.Abs(lp.x - fp.x) > dragDistance || Mathf.Abs(lp.y - fp.y) > dragDistance)
+                    {//It's a drag
+                     //check if the drag is vertical or horizontal
+                        if (Mathf.Abs(lp.x - fp.x) > Mathf.Abs(lp.y - fp.y))
+                        {   //If the horizontal movement is greater than the vertical movement...
+                            // if (lp.x > fp.x)  //If the movement was to the right)
+                            // {   //Right swipe
+                            //     Debug.Log("Right Swipe");
+                            // }
+                            // else
+                            // {   //Left swipe
+                            //     Debug.Log("Left Swipe");
+                            // }
+                        }
+                        else
+                        {   //the vertical movement is greater than the horizontal movement
+                            if (lp.y > fp.y)  //If the movement was up
+                            {   //Up swipe
+                                // Debug.Log("Up Swipe");
+                                jumpBufferCounter = jumpBufferTime;
+
+                            }
+                        }
+                    }
+                    else
+                    {   //It's a tap as the drag distance is less than 20% of the screen height
+                        moveValue = 0;
+                        // Debug.Log("Tap");
+                    }
+
+                }
         }
     }
 }
