@@ -26,7 +26,7 @@ public class BallMovement : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        dragDistance = Screen.height * 20 / 100; //dragDistance is 15% height of the screen
+        dragDistance = Screen.height * 11 / 100; //dragDistance is 15% height of the screen
 
     }
 
@@ -134,15 +134,6 @@ public class BallMovement : MonoBehaviour
                 {
                     lp = touch.position;
                     moveValue = 0;
-
-                }
-                else if (touch.phase == TouchPhase.Ended) //check if the finger is removed from the screen
-                {
-                    moveValue = 0;
-
-                    lp = touch.position;  //last touch position. Ommitted if you use list
-
-                    //Check if drag distance is greater than 20% of the screen height
                     if (Mathf.Abs(lp.x - fp.x) > dragDistance || Mathf.Abs(lp.y - fp.y) > dragDistance)
                     {//It's a drag
                      //check if the drag is vertical or horizontal
@@ -166,6 +157,15 @@ public class BallMovement : MonoBehaviour
 
                             }
                         }
+                }
+                else if (touch.phase == TouchPhase.Ended) //check if the finger is removed from the screen
+                {
+                    moveValue = 0;
+
+                    lp = touch.position;  //last touch position. Ommitted if you use list
+
+                    //Check if drag distance is greater than 20% of the screen height
+                    
                     }
                     else
                     {   //It's a tap as the drag distance is less than 20% of the screen height
