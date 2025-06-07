@@ -37,7 +37,8 @@ public class BallMovement : MonoBehaviour
         jumpDetector.transform.rotation = Quaternion.identity;
         jumpDetector.transform.position = new Vector3(transform.position.x, transform.position.y - 0.55f, 0f);
         // movX = Input.GetAxis("Horizontal"); // Comment out for release
-        movX = moveValue;
+        // movX = moveValue; // Uncomment
+        movX = Input.GetAxis("Horizontal");
         if (groundCheck.isGrounded)
         {
             coyoteTimeCounter = coyoteTime;
@@ -56,7 +57,6 @@ public class BallMovement : MonoBehaviour
         }
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
-            //   Jump();
             rb2d.linearVelocityY = jumpSpeed;
             coyoteTimeCounter = 0f;
             jumpBufferCounter = 0f;
@@ -90,10 +90,7 @@ public class BallMovement : MonoBehaviour
 
     public void Jump()
     {
-        // if (groundCheck.isGrounded)
-        // {
-        //     rb2d.linearVelocityY = jumpSpeed;
-        // }
+ 
         jumpBufferCounter = jumpBufferTime;
 
     }
